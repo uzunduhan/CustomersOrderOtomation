@@ -117,53 +117,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <img src="~/images/cloth_1.jpg" alt="Image" class="img-fluid">
-                                        </td>
-                                        <td class="product-name">
-                                            <h2 class="h5 text-black">Top Up T-Shirt</h2>
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td>
-                                            <div class="input-group mb-3" style="max-width: 120px;">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                    @for(int i =0; i < 5; i++)
+                                    {
+                                        <tr>
+                                            <td class="product-thumbnail">
+                                                <img src="~/images/cloth_1.jpg" alt="Image" class="img-fluid">
+                                            </td>
+                                            <td class="product-name">
+                                                <h2 class="h5 text-black">Top Up T-Shirt</h2>
+                                            </td>
+                                            <td id="tdPriceProduct_@i" val="49.00">49.00 TL</td> 
+                                            <td>
+                                                <div class="input-group mb-3" style="max-width: 120px;">
+                                                    <div class="input-group-prepend">
+                                                        <button class="btn btn-outline-primary js-btn-minus" id="btnMinus_@i" type="button">&minus;</button>
+                                                    </div>
+                                                    <input type="text" class="form-control text-center" value="1" id="inputProductCount_@i" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary js-btn-plus" id="btnPlus_@i" type="button">&plus;</button>
+                                                    </div>
                                                 </div>
-                                                <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                                                </div>
-                                            </div>
 
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                                    </tr>
+                                            </td>
+                                            <td id="tdTotalPriceProduct_@i" val="49.00">49.00 TL</td>
+                                            <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
+                                        </tr>
+                                    }
+                                    
 
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <img src="~/images/cloth_2.jpg" alt="Image" class="img-fluid">
-                                        </td>
-                                        <td class="product-name">
-                                            <h2 class="h5 text-black">Polo Shirt</h2>
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td>
-                                            <div class="input-group mb-3" style="max-width: 120px;">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                                                </div>
-                                                <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -171,29 +152,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="row mb-5">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <button class="btn btn-primary btn-sm btn-block">Update Cart</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="text-black h4" for="coupon">Coupon</label>
-                                <p>Enter your coupon code if you have one.</p>
-                            </div>
-                            <div class="col-md-8 mb-3 mb-md-0">
-                                <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-primary btn-sm">Apply Coupon</button>
-                            </div>
-                        </div>
+                    <div class="col-md-6 pl-5">
                     </div>
                     <div class="col-md-6 pl-5">
+
                         <div class="row justify-content-end">
                             <div class="col-md-7">
                                 <div class="row">
@@ -201,20 +163,13 @@
                                         <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <span class="text-black">Subtotal</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <strong class="text-black">$230.00</strong>
-                                    </div>
-                                </div>
+                          
                                 <div class="row mb-5">
                                     <div class="col-md-6">
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">$230.00</strong>
+                                        <strong class="text-black" vaL="230.00" id="stTotalPrice">230.00 TL</strong>
                                     </div>
                                 </div>
 
@@ -316,3 +271,49 @@
 
 </body>
 </html>
+
+ <script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".js-btn-plus").click(function () {
+
+            var clickedButtonId = this.id;
+
+            var clickedButtonIdNumber = clickedButtonId.split("_")[1];
+
+            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("val");
+            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val()) + 1) * parseFloat(productPrice);
+
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
+            calculateTotalPrice();
+             
+        });
+
+        $(".js-btn-minus").click(function () {
+
+            var clickedButtonId = this.id;
+
+            var clickedButtonIdNumber = clickedButtonId.split("_")[1];
+
+            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("val");
+            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
+
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
+            calculateTotalPrice();
+        });
+    });
+
+    function calculateTotalPrice(){
+        let totalPrice = 0;
+
+        for(let i = 0; i < 5; i++){
+               totalPrice += parseFloat($("#tdTotalPriceProduct_" + i).attr("val"));
+        }
+
+        $("#stTotalPrice").attr("val", totalPrice);
+        $("#stTotalPrice").text(totalPrice + " TL");
+    }
+
+ </script>
