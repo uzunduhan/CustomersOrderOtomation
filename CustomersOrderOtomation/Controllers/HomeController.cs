@@ -22,5 +22,15 @@ namespace CustomersOrderOtomation.Controllers
             return View();
         }
 
+        public IActionResult Shop()
+        {
+            return View();
+        }
+
+        public IActionResult ShopDetailed(int productId)
+        {
+            return View();
+        }
+
     }
 }
