@@ -1,7 +1,19 @@
+using CustomersOrderOtomation.Data.DBOperations;
+using CustomersOrderOtomation.Extensions;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddServicesDI();
+
+builder.Services.AddDbContext<DatabaseContext>(
+       options => options.UseSqlServer("name=ConnectionStrings:SqlServerConnectionString"));
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 

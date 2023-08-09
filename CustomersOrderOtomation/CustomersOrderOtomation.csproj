@@ -12,4 +12,19 @@
     <Folder Include="wwwroot\scss\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomersOrderOtomation.Data\CustomersOrderOtomation.Data.csproj" />
+    <ProjectReference Include="..\CustomersOrderOtomation.Service\CustomersOrderOtomation.Service.csproj" />
+  </ItemGroup>
+
 </Project>
