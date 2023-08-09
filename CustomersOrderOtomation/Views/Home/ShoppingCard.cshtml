@@ -122,7 +122,11 @@
 
             $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
             $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
-            calculateTotalPrice();
+
+            var totalPrice = calculatedTotalPrice();
+
+            $("#stTotalPrice").attr("val", totalPrice);
+            $("#stTotalPrice").text(totalPrice + " TL");
              
         });
 
@@ -137,19 +141,23 @@
 
             $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
             $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
-            calculateTotalPrice();
+
+            var totalPrice = calculatedTotalPrice();
+
+            $("#stTotalPrice").attr("val", totalPrice);
+            $("#stTotalPrice").text(totalPrice + " TL");
         });
     });
 
-    function calculateTotalPrice(){
+    function calculatedTotalPrice(){
+
         let totalPrice = 0;
 
         for(let i = 0; i < 5; i++){
                totalPrice += parseFloat($("#tdTotalPriceProduct_" + i).attr("val"));
         }
 
-        $("#stTotalPrice").attr("val", totalPrice);
-        $("#stTotalPrice").text(totalPrice + " TL");
+        return totalPrice;
     }
 
  </script>
