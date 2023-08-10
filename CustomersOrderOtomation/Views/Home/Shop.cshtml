@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model List<CustomersOrderOtomation.ViewModel.Product.ProductViewModel>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
@@ -25,17 +27,16 @@
                
                         <div class="row mb-5">
 
-                            @for(int i = 0; i < 20; i++)
+                            @foreach(var item in Model)
                             {
                                 <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                                     <div class="block-4 text-center border">
                                         <figure class="block-4-image">
-                                            <a asp-controller="Home" asp-action="ShopDetailed" asp-route-productId="123"><img src="~/images/cloth_1.jpg" alt="Image placeholder" class="img-fluid"></a>
+                                            <a asp-controller="Home" asp-action="ShopDetailed" asp-route-productId="@item.Id"><img src="~/images/cloth_1.jpg" alt="Image placeholder" class="img-fluid"></a>
                                         </figure>
                                         <div class="block-4-text p-4">
-                                            <h3><a href="shop-single.html">Tank Top</a></h3>
-                                            <p class="mb-0">Finding perfect t-shirt</p>
-                                            <p class="text-primary font-weight-bold">$50</p>
+                                            <h3><a href="shop-single.html">@item.Name</a></h3>
+                                            <p class="text-primary font-weight-bold">@item.Price TL</p>
                                         </div>
                                     </div>
                                 </div>
@@ -65,10 +66,7 @@
                     <div class="col-md-3 order-1 mb-5 mb-md-0">
                         <div class="border p-4 rounded mb-4">
                             <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-1"><a href="#" class="d-flex"><span>Men</span> <span class="text-black ml-auto"></span></a></li>
-                                <li class="mb-1"><a href="#" class="d-flex"><span>Women</span> <span class="text-black ml-auto"></span></a></li>
-                                <li class="mb-1"><a href="#" class="d-flex"><span>Children</span> <span class="text-black ml-auto"></span></a></li>
+                            <ul class="list-unstyled mb-0" id="ulCategorListField">
                             </ul>
                         </div>
                     </div>
@@ -76,5 +74,35 @@
             </div>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </body>
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("GetCategories","Home")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+  
+                let categoryListHtml = '';
+
+                for(let i = 0; i < data.length; i ++){
+                    
+                        categoryListHtml += '<li class="mb-1"><a href="#" class="d-flex"><span val=' + data[i].id + '>' + data[i].name + '</span><span class="text-black ml-auto"></span></a></li>'
+                
+                }
+
+                $("#ulCategorListField").html(categoryListHtml);
+
+             
+            },
+            error: function (exc) {
+
+            }
+        });
+    });
+
+
+</script>

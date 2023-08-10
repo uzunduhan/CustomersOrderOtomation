@@ -1,14 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CustomersOrderOtomation.Service.Abstract;
+using CustomersOrderOtomation.ViewModel.Category;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersOrderOtomation.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ICategoryService categoryService, IProductService productService)
         {
             _logger = logger;
+            this.categoryService = categoryService;
+            this.productService = productService;
         }
 
         public IActionResult Index()
@@ -21,14 +27,20 @@ namespace CustomersOrderOtomation.Controllers
             return View();
         }
 
-        public IActionResult Shop()
+        public async Task <IActionResult> Shop()
         {
-            return View();
+            var products = await productService.GetAllProducts();
+            return View(products);
         }
 
         public IActionResult ShopDetailed(int productId)
         {
             return View();
+        }
+
+        public async Task<List<CategoryViewModel>> GetCategories()
+        {
+            return await categoryService.GetAllCategories();
         }
 
     }
