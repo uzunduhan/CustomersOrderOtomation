@@ -89,8 +89,8 @@
                 let categoryListHtml = '';
 
                 for(let i = 0; i < data.length; i ++){
-                    
-                        categoryListHtml += '<li class="mb-1"><a href="#" class="d-flex"><span val=' + data[i].id + '>' + data[i].name + '</span><span class="text-black ml-auto"></span></a></li>'
+
+                    categoryListHtml += '<li class="mb-1"><a href="GetProductsByCategory?categoryId=' + data[i].id + '"  class="d-flex"><span>' + data[i].name + '</span><span class="text-black ml-auto"></span></a></li>'
                 
                 }
 
