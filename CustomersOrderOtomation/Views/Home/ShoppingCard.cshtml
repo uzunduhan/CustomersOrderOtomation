@@ -124,7 +124,7 @@
                             '<div class="input-group-prepend">' +
                             '<button class="btn btn-outline-primary js-btn-minus" id="btnMinus_' + data[i].id + '" type="button" onclick="minusProductCount(' + data[i].id + ');">&minus;</button>' +
                             '</div>' +
-                            '<input type="text" class="form-control text-center" value="' + data[i].piece + '"  id="inputProductCount_' + data[i].id + '" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">' +
+                            '<input type="text" class="form-control text-center" onchange="changedProductCount(' + data[i].id + ');" value="' + data[i].piece + '"  id="inputProductCount_' + data[i].id + '" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">' +
                             '<div class="input-group-append">' +
                             '<button class="btn btn-outline-primary js-btn-plus" id="btnPlus_' + data[i].id + '" type="button" onclick="plusProductCount('+data[i].id+');">&plus;</button>' +
                             '</div>' +
@@ -173,39 +173,46 @@
 
     function plusProductCount(id) {
 
+        changedProductCount(id);
+      
+        $("#inputProductCount_" + parseInt(id)).val(parseInt($("#inputProductCount_" + parseInt(id)).val()) + 1);
 
-        var clickedButtonIdNumber = id;
-
-        $("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val(parseInt($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val()) + 1);
-
-        var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
-        var updatedPriceValue = (parseFloat($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val())) * parseFloat(productPrice);
-
-        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
-        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
-
-        var totalPrice = calculatedTotalPrice();
-
-        $("#stTotalPrice").attr("val", totalPrice);
-        $("#stTotalPrice").text(totalPrice + " TL");
+  
     }
 
     function minusProductCount(id){
 
-        var clickedButtonIdNumber = id
+        changedProductCount(id);
 
-        $("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val(parseInt($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val()) - 1);
+        $("#inputProductCount_" + parseInt(id)).val(parseInt($("#inputProductCount_" + parseInt(id)).val()) - 1);
 
-        var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
-        var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
 
-        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
-        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
+    }
 
-        var totalPrice = calculatedTotalPrice();
+    function changedProductCount(id){
 
-        $("#stTotalPrice").attr("val", totalPrice);
-        $("#stTotalPrice").text(totalPrice + " TL");
+        if (Number.isInteger(id)) {
+
+            var clickedButtonIdNumber = id
+
+            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
+            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
+
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
+
+            var totalPrice = calculatedTotalPrice();
+
+            $("#stTotalPrice").attr("val", totalPrice);
+            $("#stTotalPrice").text(totalPrice + " TL");
+        }
+
+        else{
+            console.log("hata");
+        }
+
+     
+   
     }
 
 
