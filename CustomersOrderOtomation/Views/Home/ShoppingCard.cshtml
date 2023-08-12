@@ -34,33 +34,10 @@
                                         <th class="product-remove">Remove</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @for(int i =0; i < 5; i++)
-                                    {
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <img src="~/images/cloth_1.jpg" alt="Image" class="img-fluid">
-                                            </td>
-                                            <td class="product-name">
-                                                <h2 class="h5 text-black">Top Up T-Shirt</h2>
-                                            </td>
-                                            <td id="tdPriceProduct_@i" val="49.00">49.00 TL</td> 
-                                            <td>
-                                                <div class="input-group mb-3" style="max-width: 120px;">
-                                                    <div class="input-group-prepend">
-                                                        <button class="btn btn-outline-primary js-btn-minus" id="btnMinus_@i" type="button">&minus;</button>
-                                                    </div>
-                                                    <input type="text" class="form-control text-center" value="1" id="inputProductCount_@i" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-primary js-btn-plus" id="btnPlus_@i" type="button">&plus;</button>
-                                                    </div>
-                                                </div>
-
-                                            </td>
-                                            <td id="tdTotalPriceProduct_@i" val="49.00">49.00 TL</td>
-                                            <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                                        </tr>
-                                    }
+                                <tbody id="tbShopListField">
+                                 
+                                    
+                                    
                                     
 
                                 </tbody>
@@ -87,7 +64,7 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black" vaL="230.00" id="stTotalPrice">230.00 TL</strong>
+                                        <strong class="text-black" vaL="0" id="stTotalPrice">0 TL</strong>
                                     </div>
                                 </div>
 
@@ -105,59 +82,132 @@
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 </body>
 </html>
 
  <script type="text/javascript">
 
     $(document).ready(function () {
-        $(".js-btn-plus").click(function () {
 
-            var clickedButtonId = this.id;
+ 
 
-            var clickedButtonIdNumber = clickedButtonId.split("_")[1];
+        let basket = localStorage.getItem("productsBasket");
 
-            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("val");
-            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val()) + 1) * parseFloat(productPrice);
 
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
+        if(basket != null){
 
-            var totalPrice = calculatedTotalPrice();
+            $.ajax({
+                url: '/Home/GetShoppingCardProducts',
+                type: 'POST',
+                data: basket,
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                async: false,
+                success: function (data) {
 
-            $("#stTotalPrice").attr("val", totalPrice);
-            $("#stTotalPrice").text(totalPrice + " TL");
-             
-        });
+                    var shopListHtml = '';
+                    var totalAmountToList = 0;
 
-        $(".js-btn-minus").click(function () {
+                    for (let i = 0; i < data.length; i++) {
+                        shopListHtml +=
+                            '<tr>' +
+                            '<td class="product-thumbnail">' +
+                            '<img src="/images/cloth_1.jpg" alt="Image" class="img-fluid">' +
+                            '</td>' +
+                            '<td class="product-name">' +
+                            '<h2 class="h5 text-black">' + data[i].name + '</h2>' +
+                            '</td>' +
+                            '<td id="tdPriceProduct_' + data[i].id + '" value="'+ data[i].price +'">' + data[i].price +' TL</td>' +
+                            '<td>' +
+                            '<div class="input-group mb-3" style="max-width: 120px;">' +
+                            '<div class="input-group-prepend">' +
+                            '<button class="btn btn-outline-primary js-btn-minus" id="btnMinus_' + data[i].id + '" type="button" onclick="minusProductCount(' + data[i].id + ');">&minus;</button>' +
+                            '</div>' +
+                            '<input type="text" class="form-control text-center" value="' + data[i].piece + '"  id="inputProductCount_' + data[i].id + '" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">' +
+                            '<div class="input-group-append">' +
+                            '<button class="btn btn-outline-primary js-btn-plus" id="btnPlus_' + data[i].id + '" type="button" onclick="plusProductCount('+data[i].id+');">&plus;</button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td class="tdTotalPriceProduct" id="tdTotalPriceProduct_' + data[i].id + '" value="' + parseFloat(data[i].price) * parseFloat(data[i].piece) + '">' + parseFloat(data[i].price) * parseFloat(data[i].piece) + ' TL</td>' +
+                            '<td><a href="#" class="btn btn-primary btn-sm">X</a></td>' +
+                            '</tr>';
 
-            var clickedButtonId = this.id;
+                             totalAmountToList += parseFloat(data[i].price) * parseFloat(data[i].piece);
 
-            var clickedButtonIdNumber = clickedButtonId.split("_")[1];
+                    }
 
-            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("val");
-            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
 
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("val", updatedPriceValue);
+                    $("#tbShopListField").html(shopListHtml);
+                    $("#stTotalPrice").attr("val", totalAmountToList);
+                    $("#stTotalPrice").text(totalAmountToList);
+                },
+                error: function (exc) {
 
-            var totalPrice = calculatedTotalPrice();
+                }
+            });
 
-            $("#stTotalPrice").attr("val", totalPrice);
-            $("#stTotalPrice").text(totalPrice + " TL");
-        });
+
+    
+        }
+
+
+       
     });
 
     function calculatedTotalPrice(){
 
         let totalPrice = 0;
 
-        for(let i = 0; i < 5; i++){
-               totalPrice += parseFloat($("#tdTotalPriceProduct_" + i).attr("val"));
-        }
+        var childList = $("#tbShopListField").find(".tdTotalPriceProduct");
+
+
+        childList.each(function () {
+               totalPrice += parseFloat($(this).attr("value"));
+        });
+
 
         return totalPrice;
     }
+
+    function plusProductCount(id) {
+
+
+        var clickedButtonIdNumber = id;
+
+        $("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val(parseInt($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val()) + 1);
+
+        var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
+        var updatedPriceValue = (parseFloat($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val())) * parseFloat(productPrice);
+
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
+
+        var totalPrice = calculatedTotalPrice();
+
+        $("#stTotalPrice").attr("val", totalPrice);
+        $("#stTotalPrice").text(totalPrice + " TL");
+    }
+
+    function minusProductCount(id){
+
+        var clickedButtonIdNumber = id
+
+        $("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val(parseInt($("#inputProductCount_" + parseInt(clickedButtonIdNumber)).val()) - 1);
+
+        var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
+        var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
+
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
+
+        var totalPrice = calculatedTotalPrice();
+
+        $("#stTotalPrice").attr("val", totalPrice);
+        $("#stTotalPrice").text(totalPrice + " TL");
+    }
+
+
 
  </script>

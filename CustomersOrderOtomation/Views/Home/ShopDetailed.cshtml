@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <div class="site-wrap">
         <div class="bg-light py-3">
@@ -26,30 +27,73 @@
                         <img src="~/images/cloth_1.jpg" alt="Image" class="img-fluid">
                     </div>
                     <div class="col-md-6">
-                        <h2 class="text-black">@Model.Name</h2>
+                        <input id="inProductId" type="hidden" value="@Model.Id"/>   
+                        <h2 class="text-black" id="hProductName">@Model.Name</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae, explicabo? Incidunt facere, natus soluta dolores iusto! Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga voluptas, distinctio, aperiam, ratione dolore.</p>
                         <p class="mb-4">Ex numquam veritatis debitis minima quo error quam eos dolorum quidem perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus molestias omnis reiciendis perspiciatis illum hic magni iste, velit aperiam quis.</p>
-                        <p><strong class="text-primary h4">@Model.Price TL</strong></p>
+                        <p><strong class="text-primary h4" id="strProductPrice">@Model.Price TL</strong></p>
        
                         <div class="mb-5">
                             <div class="input-group mb-3" style="max-width: 120px;">
                                 <div class="input-group-prepend">
                                     <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                                 </div>
-                                <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                <input type="text" class="form-control text-center" id="inProductPiece" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                                 </div>
                             </div>
 
                         </div>
-                        <p><a asp-controller="Home" asp-action="ShoppingCard" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+                        <p><a  class="buy-now btn btn-sm btn-primary" onclick="addToBasket();">Sepete Ekle</a></p>
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+ 
 </body>
 </html>
+
+<script type="text/javascript">
+
+    var productArray = [];
+
+    $(document).ready(function () {
+        // You can initialize the productArray from localStorage here if needed
+    });
+
+    function addToBasket() {
+        let basket = localStorage.getItem("productsBasket");
+
+        if (basket == null) {
+            productArray.push(createProductObject());
+
+            // Save the productArray as a JSON string in localStorage
+            localStorage.setItem("productsBasket", JSON.stringify(productArray));
+        } else {
+            // Parse the JSON string back to an array
+            productArray = JSON.parse(basket);
+
+            productArray.push(createProductObject());
+
+            // Save the updated productArray back to localStorage
+            localStorage.setItem("productsBasket", JSON.stringify(productArray));
+        }
+    }
+
+    function createProductObject() {
+        const product = {
+            productId: $("#inProductId").val(),
+            piece: $("#inProductPiece").val(),
+        };
+
+        return product;
+    }
+
+
+
+</script>
 

@@ -37,7 +37,7 @@
                                 <li>
                                     <a asp-controller="Home" asp-action="ShoppingCard" class="site-cart">
                                         <span class="icon icon-shopping_cart"></span>
-                                        <span class="count">2</span>
+                                        <span class="count" id="spnShopListProductCount"></span>
                                     </a>
                                 </li>
                                 <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -146,3 +146,14 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        let basket =JSON.parse(localStorage.getItem("productsBasket"));
+        const sum = basket.reduce((acc, current) => acc + parseInt(current.piece), 0);
+        $("#spnShopListProductCount").text(sum);
+    });
+
+</script>
+
