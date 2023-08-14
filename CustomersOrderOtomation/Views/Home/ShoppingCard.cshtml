@@ -103,7 +103,7 @@
                 data: basket,
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                async: false,
+                async: true,
                 success: function (data) {
 
                     var shopListHtml = '';
@@ -124,14 +124,14 @@
                             '<div class="input-group-prepend">' +
                             '<button class="btn btn-outline-primary js-btn-minus" id="btnMinus_' + data[i].id + '" type="button" onclick="minusProductCount(' + data[i].id + ');">&minus;</button>' +
                             '</div>' +
-                            '<input type="text" class="form-control text-center" onchange="changedProductCount(' + data[i].id + ');" value="' + data[i].piece + '"  id="inputProductCount_' + data[i].id + '" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">' +
+                            '<input type="text" class="form-control text-center inputProductCount" onchange="changedProductCount(' + data[i].id + ');" value="' + data[i].piece + '"  id="inputProductCount_' + data[i].id + '" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">' +
                             '<div class="input-group-append">' +
                             '<button class="btn btn-outline-primary js-btn-plus" id="btnPlus_' + data[i].id + '" type="button" onclick="plusProductCount('+data[i].id+');">&plus;</button>' +
                             '</div>' +
                             '</div>' +
                             '</td>' +
                             '<td class="tdTotalPriceProduct" id="tdTotalPriceProduct_' + data[i].id + '" value="' + parseFloat(data[i].price) * parseFloat(data[i].piece) + '">' + parseFloat(data[i].price) * parseFloat(data[i].piece) + ' TL</td>' +
-                            '<td><a href="#" class="btn btn-primary btn-sm">X</a></td>' +
+                            '<td><a onclick="deleteProductToList('+data[i].id+')" class="btn btn-primary btn-sm">X</a></td>' +
                             '</tr>';
 
                              totalAmountToList += parseFloat(data[i].price) * parseFloat(data[i].piece);
@@ -156,7 +156,7 @@
        
     });
 
-    function calculatedTotalPrice(){
+    function calculateTotalPrice() {
 
         let totalPrice = 0;
 
@@ -164,7 +164,7 @@
 
 
         childList.each(function () {
-               totalPrice += parseFloat($(this).attr("value"));
+            totalPrice += parseFloat($(this).attr("value"));
         });
 
 
@@ -173,35 +173,50 @@
 
     function plusProductCount(id) {
 
-        changedProductCount(id);
-      
-        $("#inputProductCount_" + parseInt(id)).val(parseInt($("#inputProductCount_" + parseInt(id)).val()) + 1);
+        var productCount = parseInt($("#inputProductCount_" + parseInt(id)).val());
+        productCount = productCount + 1;
 
-  
-    }
-
-    function minusProductCount(id){
+        $("#inputProductCount_" + parseInt(id)).val(productCount);
+        $("#inputProductCount_" + parseInt(id)).attr("value", productCount);
 
         changedProductCount(id);
 
-        $("#inputProductCount_" + parseInt(id)).val(parseInt($("#inputProductCount_" + parseInt(id)).val()) - 1);
+
 
 
     }
 
-    function changedProductCount(id){
+    function minusProductCount(id) {
 
-        var productCount = parseInt($("#inputProductCount_" +id).val());
+        var productCount = parseInt($("#inputProductCount_" + parseInt(id)).val());
+        productCount = productCount - 1;
+
+        $("#inputProductCount_" + parseInt(id)).val(productCount);
+        $("#inputProductCount_" + parseInt(id)).attr("value", productCount);
+
+
+        changedProductCount(id);
+
+
+
+
+    }
+
+    function changedProductCount(id) {
+
+        var productCount = parseInt($("#inputProductCount_" + parseInt(id)).val());
 
         if (Number.isInteger(productCount)) {
 
-          calculateAndSetPrice(id);
+            $("#inputProductCount_" + parseInt(id)).attr("value", productCount);
+            calculateAndSetPrice(id);
         }
 
-        else{
+        else {
 
-            $("#inputProductCount_" + id).val(0);
-            calculatePrice(id);
+            $("#inputProductCount_" + parseInt(id)).val(0);
+            $("#inputProductCount_" + parseInt(id)).attr("value", 0);
+            calculateAndSetPrice(id);
 
             new Notify({
                 title: 'Hesaplama Hatası',
@@ -210,8 +225,8 @@
             })
         }
 
-     
-   
+
+
     }
 
     function calculateAndSetPrice(id) {
@@ -219,28 +234,91 @@
         var clickedButtonIdNumber = id
 
         var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
-        var updatedPriceValue = parseInt($("#inputProductCount_" + id).val()) * parseFloat(productPrice);
+        var updatedPriceValue = parseInt($("#inputProductCount_" + parseInt(id)).val()) * parseFloat(productPrice);
 
         $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
         $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
 
-        var totalPrice = calculatedTotalPrice();
+        var totalPrice = calculateTotalPrice();
 
         $("#stTotalPrice").attr("val", totalPrice);
         $("#stTotalPrice").text(totalPrice + " TL");
+
+        updateShoppingList();
     }
 
-    function approveToOrder(){
+    function approveToOrder() {
+
+        localStorage.clear();
 
         new Notify({
             title: 'Sipariş Onaylandı',
             text: 'Siparişiniz alınmıştır.',
             status: 'success',
             autoclose: true,
-            autotimeout: 3000
+            autotimeout: 2000
         })
+
+
+        setTimeout(function () {
+            window.location.href = 'Shop';
+        }, 2000);
+
+
     }
 
+    function updateShoppingList(){
 
+
+        localStorage.clear();
+
+        var productArray = [];
+
+        var childList = $("#tbShopListField").find(".inputProductCount");
+
+
+        childList.each(function () {
+
+            var updatedProductCount = $(this).attr("value");
+            var productID = $(this).attr("id").split("_")[1];
+
+            const product = {
+                productId: productID,
+                piece: updatedProductCount,
+            };
+
+            productArray.push(product);
+        
+        });
+
+        localStorage.setItem("productsBasket", JSON.stringify(productArray));
+    }
+
+    function deleteProductToList(id){
+
+        let basket = localStorage.getItem("productsBasket");
+        productArray = JSON.parse(basket);
+
+        var myString = String(id);
+
+        var itemsToDelete = [myString];
+
+        itemsToDelete.forEach(function (itemId) {
+            var indexToDelete = productArray.findIndex(function (item) {
+                return item.productId === itemId;
+            });
+
+            if (indexToDelete !== -1) {
+                productArray.splice(indexToDelete, 1);
+            }
+        });
+
+        localStorage.setItem("productsBasket", JSON.stringify(productArray));
+
+        window.location.href = 'ShoppingCard';
+   
+    }
+
+   
 
  </script>
