@@ -70,7 +70,7 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                                        <button class="btn btn-primary btn-lg py-3 btn-block" onclick="approveToOrder()">Proceed To Checkout</button>
                                     </div>
                                 </div>
                             </div>
@@ -191,28 +191,54 @@
 
     function changedProductCount(id){
 
-        if (Number.isInteger(id)) {
+        var productCount = parseInt($("#inputProductCount_" +id).val());
 
-            var clickedButtonIdNumber = id
+        if (Number.isInteger(productCount)) {
 
-            var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
-            var updatedPriceValue = (parseFloat($("#inputProductCount_" + clickedButtonIdNumber).val())) * parseFloat(productPrice);
-
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
-            $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
-
-            var totalPrice = calculatedTotalPrice();
-
-            $("#stTotalPrice").attr("val", totalPrice);
-            $("#stTotalPrice").text(totalPrice + " TL");
+          calculateAndSetPrice(id);
         }
 
         else{
-            console.log("hata");
+
+            $("#inputProductCount_" + id).val(0);
+            calculatePrice(id);
+
+            new Notify({
+                title: 'Hesaplama Hatası',
+                text: 'Lütfen sadece sayı girin',
+                status: 'warning',
+            })
         }
 
      
    
+    }
+
+    function calculateAndSetPrice(id) {
+
+        var clickedButtonIdNumber = id
+
+        var productPrice = $("#tdPriceProduct_" + clickedButtonIdNumber).attr("value");
+        var updatedPriceValue = parseInt($("#inputProductCount_" + id).val()) * parseFloat(productPrice);
+
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).text(updatedPriceValue + " TL");
+        $("#tdTotalPriceProduct_" + clickedButtonIdNumber).attr("value", updatedPriceValue);
+
+        var totalPrice = calculatedTotalPrice();
+
+        $("#stTotalPrice").attr("val", totalPrice);
+        $("#stTotalPrice").text(totalPrice + " TL");
+    }
+
+    function approveToOrder(){
+
+        new Notify({
+            title: 'Sipariş Onaylandı',
+            text: 'Siparişiniz alınmıştır.',
+            status: 'success',
+            autoclose: true,
+            autotimeout: 3000
+        })
     }
 
 

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="~/css/aos.css">
     <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/simple-notify.min.css" />
 </head>
 <body>
     <header class="site-navbar" role="banner">
@@ -143,6 +144,7 @@
     <script src="~/js/jquery.magnific-popup.min.js"></script>
     <script src="~/js/aos.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="~/js/simple-notify.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
@@ -153,6 +155,7 @@
         let basket =JSON.parse(localStorage.getItem("productsBasket"));
         const sum = basket.reduce((acc, current) => acc + parseInt(current.piece), 0);
         $("#spnShopListProductCount").text(sum);
+
     });
 
 </script>
