@@ -6,6 +6,8 @@ using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System;
 
 namespace CustomersOrderOtomation.Controllers
 {
@@ -14,14 +16,16 @@ namespace CustomersOrderOtomation.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ICategoryService categoryService;
         private readonly IProductService productService;
+        private readonly IShopListService shopListService;
         private readonly DatabaseContext context;
         private readonly IMapper mapper;
 
-        public HomeController(ILogger<HomeController> logger, ICategoryService categoryService, IProductService productService, DatabaseContext context, IMapper mapper)
+        public HomeController(ILogger<HomeController> logger, ICategoryService categoryService, IProductService productService, IShopListService shopListService, DatabaseContext context, IMapper mapper)
         {
             _logger = logger;
             this.categoryService = categoryService;
             this.productService = productService;
+            this.shopListService = shopListService;
             this.context = context;
             this.mapper = mapper;
         }
@@ -72,6 +76,28 @@ namespace CustomersOrderOtomation.Controllers
 
 
             return productDetailViewModels;
+        }
+
+        public async Task<IActionResult> AddShoppingCardProductsToShopList(string cusName, string cusTableNo, [FromBody]List<ShopListAddShoppingCardProductsDto> dto)
+        {
+            ShopListDto shopListDto = new ShopListDto()
+            {
+                OrderCustomerName = cusName,
+                OrderTableNumber = cusTableNo,
+                ShopListProductsData = JsonSerializer.Serialize(dto)
+            };
+
+            try
+            {
+                await shopListService.AddShopListAsync(shopListDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Hata olustu");
+            }
+
+          
+            return Json("basarili");
         }
 
 

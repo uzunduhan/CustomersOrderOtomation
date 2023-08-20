@@ -68,6 +68,24 @@
                                     </div>
                                 </div>
 
+                                <div class="row mb-5">
+                                    <div class="col-md-6">
+                                        <span class="text-black">Ad Soyad</span>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="inputCustomerFullName">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-5">
+                                    <div class="col-md-6">
+                                        <span class="text-black">Masa Numarası</span>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="inputCustomerTableNumber">
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button class="btn btn-primary btn-lg py-3 btn-block" onclick="approveToOrder()">Proceed To Checkout</button>
@@ -111,14 +129,14 @@
 
                     for (let i = 0; i < data.length; i++) {
                         shopListHtml +=
-                            '<tr>' +
+                            '<tr class="trClass">' +
                             '<td class="product-thumbnail">' +
                             '<img src="/images/cloth_1.jpg" alt="Image" class="img-fluid">' +
                             '</td>' +
                             '<td class="product-name">' +
-                            '<h2 class="h5 text-black">' + data[i].name + '</h2>' +
+                            '<h2 class="h5 text-black hProductName">' + data[i].name + '</h2>' +
                             '</td>' +
-                            '<td id="tdPriceProduct_' + data[i].id + '" value="'+ data[i].price +'">' + data[i].price +' TL</td>' +
+                            '<td id="tdPriceProduct_' + data[i].id + '" class="tdPriceProduct" value="'+ data[i].price +'">' + data[i].price +' TL</td>' +
                             '<td>' +
                             '<div class="input-group mb-3" style="max-width: 120px;">' +
                             '<div class="input-group-prepend">' +
@@ -141,7 +159,7 @@
 
                     $("#tbShopListField").html(shopListHtml);
                     $("#stTotalPrice").attr("val", totalAmountToList);
-                    $("#stTotalPrice").text(totalAmountToList);
+                    $("#stTotalPrice").text(totalAmountToList + " TL");
                 },
                 error: function (exc) {
 
@@ -249,20 +267,91 @@
 
     function approveToOrder() {
 
-        localStorage.clear();
+        var shopList = JSON.stringify(getShoplistProductsData());
 
-        new Notify({
-            title: 'Sipariş Onaylandı',
-            text: 'Siparişiniz alınmıştır.',
-            status: 'success',
-            autoclose: true,
-            autotimeout: 2000
-        })
+        console.log(shopList);
+
+       var customerName = $("#inputCustomerFullName").val();
+        var customerTableNumber = $("#inputCustomerTableNumber").val();
+
+        $.ajax({
+            url: '/Home/AddShoppingCardProductsToShopList?cusName=' + customerName + '&cusTableNo=' + customerTableNumber,
+            type: 'POST',
+            data: shopList,
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            async: true,
+            success: function (data) {
+
+                if(data = "basarili"){
+
+                    localStorage.clear();
+
+                    new Notify({
+                        title: 'Sipariş Onaylandı',
+                        text: 'Siparişiniz alınmıştır.',
+                        status: 'success',
+                        autoclose: true,
+                        autotimeout: 2000
+                    })
 
 
-        setTimeout(function () {
-            window.location.href = 'Shop';
-        }, 2000);
+                    setTimeout(function () {
+                        window.location.href = 'Shop';
+                    }, 2000);
+                }
+
+                else{
+                    new Notify({
+                        title: 'Hata',
+                        text: 'Sipariş Alınırken Hata Oluştu.',
+                        status: 'error',
+                        autoclose: false,
+                    })
+                }
+
+         
+
+            },
+            error: function (exc) {
+                new Notify({
+                    title: 'Hata',
+                    text: 'Sipariş Alınırken Hata Oluştu.',
+                    status: 'error',
+                    autoclose: false,
+                })
+            }
+        });
+
+
+
+    }
+
+    function getShoplistProductsData(){
+
+        var shopList = [];
+
+
+        var childList = $("#tbShopListField").find(".trClass");
+
+
+        childList.each(function () {
+           let productName = $(this).find(".hProductName").text();
+           let productPrice = $(this).find(".tdPriceProduct").attr("value");
+           let productPiece =  $(this).find(".inputProductCount").attr("value");
+
+            const shop = {
+                productName: productName,
+                price: productPrice,
+                piece: productPiece,
+            };
+
+            shopList.push(shop);
+
+
+        });
+
+        return shopList;
 
 
     }
