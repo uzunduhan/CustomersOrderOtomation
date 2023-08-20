@@ -7,7 +7,6 @@ using CustomersOrderOtomation.ViewModel.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using System;
 
 namespace CustomersOrderOtomation.Controllers
 {
@@ -78,8 +77,9 @@ namespace CustomersOrderOtomation.Controllers
             return productDetailViewModels;
         }
 
-        public async Task<IActionResult> AddShoppingCardProductsToShopList(string cusName, string cusTableNo, [FromBody]List<ShopListAddShoppingCardProductsDto> dto)
+        public async Task<IActionResult> AddShoppingCardProductsToShopList(string cusName, string cusTableNo, [FromBody] List<ShopListAddShoppingCardProductsDto> dto)
         {
+
             ShopListDto shopListDto = new ShopListDto()
             {
                 OrderCustomerName = cusName,
@@ -96,7 +96,7 @@ namespace CustomersOrderOtomation.Controllers
                 return StatusCode(500, "Hata olustu");
             }
 
-          
+
             return Json("basarili");
         }
 
