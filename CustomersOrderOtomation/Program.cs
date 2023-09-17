@@ -1,4 +1,5 @@
 using CustomersOrderOtomation.Data.DBOperations;
+using CustomersOrderOtomation.Data.Models;
 using CustomersOrderOtomation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<DatabaseContext>(
        options => options.UseSqlServer("name=ConnectionStrings:SqlServerConnectionString"));
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -31,6 +34,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotifyHub>("/notify");
+});
 
 app.MapControllerRoute(
     name: "default",

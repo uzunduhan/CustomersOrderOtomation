@@ -1,0 +1,23 @@
+{
+  "name": "customersorderotomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uzunduhan/CustomersOrderOtomation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uzunduhan/CustomersOrderOtomation/issues"
+  },
+  "homepage": "https://github.com/uzunduhan/CustomersOrderOtomation#readme",
+  "dependencies": {
+    "@microsoft/signalr": "^7.0.11"
+  }
+}

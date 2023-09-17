@@ -11,11 +11,15 @@ namespace CustomersOrderOtomation.Controllers
         {
             ShopListService = shopListService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var shopLists = await ShopListService.GetAllShopLists();
-            shopLists = shopLists.OrderByDescending(x => x.Id).ToList();
-            return View(shopLists);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetShopLists() 
+        {
+            return Ok(ShopListService.GetAllShopListsWithSignalR());
         }
 
         public IActionResult AdminProduct()

@@ -6,6 +6,7 @@ namespace CustomersOrderOtomation.Data.Repository.Abstract
     {
         Task<ShopList> GetByIdAsyncWithProductsAsync(int id, int userId);
         Task<IEnumerable<ShopList>> GetAllWithProductsForAdminAsync();
+        List<ShopList> GetAllShopListWithSıgnalR();
 
     }
 }

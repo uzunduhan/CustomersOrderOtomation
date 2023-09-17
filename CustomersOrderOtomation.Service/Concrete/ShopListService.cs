@@ -80,6 +80,15 @@ namespace CustomersOrderOtomation.Service.Concrete
             await unitOfWork.CompleteAsync();
         }
 
+        public List<ShopListViewModel> GetAllShopListsWithSignalR()
+        {
+            var shopLists = shopListRepository.GetAllShopListWithSıgnalR();
+
+            List<ShopListViewModel> vm = mapper.Map<List<ShopListViewModel>>(shopLists);
+
+            return vm;
+        }
+
 
 
     }
