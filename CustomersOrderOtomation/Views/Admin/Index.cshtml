@@ -3,7 +3,6 @@
 }
 
 
-
 <table class="table align-middle mb-0 bg-white">
     <thead class="bg-light">
         <tr>
@@ -51,6 +50,7 @@
     </tbody>
 </table>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <script type="text/javascript">
 
     $(() => {
@@ -72,20 +72,31 @@
                 type: 'GET',
                 success: function (result) {
 
+                    
+
                     $.each(result, (k, v) => {
                         var shopListData = JSON.parse(v.shopListProductsData);
                         var topTotalPrice = 0;
 
-                        tr = tr + `<tr>
+                        var productHTML = "";
+                        $.each(shopListData, (index, product) => {
+                            var totalPrice = product.Piece * product.Price;
+                            topTotalPrice += totalPrice;
+                            productHTML += `<span class="badge badge-success rounded-pill d-inline">${product.Piece} ${product.ProductName}=${totalPrice} TL</span>`;
+                        });
 
-                                    <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
-                                    <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
+                
 
-        
+                        var totalHTML = `<span class="badge badge-primary rounded-pill d-inline">Total: ${topTotalPrice} TL</span>`;
 
-                                    <td>${v.shopListProductsData}</td>
-                                    </tr>`
-                    })
+                         tr += `<tr>
+                           <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
+                           <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
+                           <td>${productHTML}${totalHTML}</td>
+                           <td>${v.shopListProductsData}</td>
+                         </tr>`;
+                    });
+
 
                     $("#tbodyShopList").html(tr);
 
