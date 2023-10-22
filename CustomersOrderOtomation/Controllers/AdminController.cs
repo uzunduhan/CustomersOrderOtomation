@@ -1,4 +1,5 @@
 ﻿using CustomersOrderOtomation.Service.Abstract;
+using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersOrderOtomation.Controllers
@@ -17,9 +18,9 @@ namespace CustomersOrderOtomation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetShopLists() 
+        public List<ShopListViewModel> GetShopLists() 
         {
-            return Ok(ShopListService.GetAllShopListsWithSignalR());
+            return ShopListService.GetAllShopListsWithSignalR();
         }
 
         public IActionResult AdminProduct()

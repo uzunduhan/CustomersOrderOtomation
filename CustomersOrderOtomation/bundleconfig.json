@@ -1,0 +1,30 @@
+[
+  {
+    "outputFileName": "wwwroot/css/main.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "wwwroot/css/aos.css",
+      "wwwroot/css/owl.carousel.min.css",
+      "wwwroot/css/site.css",
+      "wwwroot/css/style.css"
+    ]
+  },
+
+  {
+    "outputFileName": "wwwroot/js/base.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/dist/jquery.min.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "wwwroot/js/admin.js",
+      "wwwroot/js/owl.carousel.min.js",
+      "wwwroot/js/aos.js",
+      "wwwroot/js/uygulama.js",
+      "wwwroot/js/main.js"
+    ],
+
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  }
+]

@@ -2,53 +2,33 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
 
-<table class="table align-middle mb-0 bg-white">
-    <thead class="bg-light">
-        <tr>
-            <th>Müşteri Bilgisi</th>
-            <th>Masa Numarası</th>
-            <th>Sipariş Bilgileri</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="tbodyShopList">
-        @*  @foreach(var item in Model)
-        {
-        var shopListData = JsonSerializer.Deserialize<List<ShopListAddShoppingCardProductsDto>>(item.ShopListProductsData);
+    <table class="table align-middle mb-0 bg-white">
+        <thead class="bg-light">
+            <tr>
+                <th>Müşteri Bilgisi</th>
+                <th>Masa Numarası</th>
+                <th>Sipariş Bilgileri</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyShopList">
+        </tbody>
+    </table>
 
-        float topTotalPrice = 0;
 
-        <tr>
-        <td>
-        <p class="fw-normal mb-1">@item.OrderCustomerName</p>
-        </td>
-        <td>
-        <p class="fw-normal mb-1">@item.OrderTableNumber</p>
-        </td>
-        <td>
-        @foreach (var product in shopListData)
-        {
-        var totalPrice = @product.Piece * @product.Price;
+</body>
+</html>
 
-        @topTotalPrice += @totalPrice;
-
-        <span class="badge badge-success rounded-pill d-inline">@product.Piece @product.ProductName=@totalPrice TL</span>
-
-        }
-
-        <span class="badge badge-primary rounded-pill d-inline">Total: @topTotalPrice TL</span>
-        </td>
-        <td>
-        <button type="button" class="btn btn-link btn-sm btn-rounded">
-        Edit
-        </button>
-        </td>
-        </tr>
-        }*@
-
-    </tbody>
-</table>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -72,7 +52,7 @@
                 type: 'GET',
                 success: function (result) {
 
-                    
+
 
                     $.each(result, (k, v) => {
                         var shopListData = JSON.parse(v.shopListProductsData);
@@ -82,19 +62,25 @@
                         $.each(shopListData, (index, product) => {
                             var totalPrice = product.Piece * product.Price;
                             topTotalPrice += totalPrice;
-                            productHTML += `<span class="badge badge-success rounded-pill d-inline">${product.Piece} ${product.ProductName}=${totalPrice} TL</span>`;
+                            productHTML += `<p class="badge badge-success rounded-pill d-inline">${product.Piece} ${product.ProductName}=${totalPrice} TL</p>`;
                         });
 
-                
 
-                        var totalHTML = `<span class="badge badge-primary rounded-pill d-inline">Total: ${topTotalPrice} TL</span>`;
 
-                         tr += `<tr>
-                           <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
-                           <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
-                           <td>${productHTML}${totalHTML}</td>
-                           <td>${v.shopListProductsData}</td>
-                         </tr>`;
+
+
+                        var totalHTML = `<p class="badge badge-primary rounded-pill d-inline">Total: ${topTotalPrice} TL</p>`;
+
+                        tr += `<tr>
+                                   <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
+                                   <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
+                                   <td>${productHTML}${totalHTML}</td>
+                                       <td>
+                                           <button type="button" class="btn btn-info">
+                                              <i class="fa fa-check-square-o" aria-hidden="true"></i> Onayla
+                                       </button>
+                                    </td>
+                                 </tr>`;
                     });
 
 
@@ -110,3 +96,4 @@
     })
 
 </script>
+
