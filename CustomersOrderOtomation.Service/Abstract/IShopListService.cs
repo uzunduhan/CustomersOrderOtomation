@@ -12,5 +12,6 @@ namespace CustomersOrderOtomation.Service.Abstract
         Task AddShopListAsync(ShopListDto updateResource);
         Task CheckIsCompleteColumnForShopList(ShopList shopList);
         List<ShopListViewModel> GetAllShopListsWithSignalR();
+        Task<ShopList> GetSingleShopListByIdAsyncPure(int id);
     }
 }

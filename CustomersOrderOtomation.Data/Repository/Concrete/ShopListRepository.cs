@@ -19,7 +19,7 @@ namespace CustomersOrderOtomation.Data.Repository.Concrete
             this.hubContext = hubContext;
         }
 
-        public async Task<ShopList> GetByIdAsyncWithProductsAsync(int id, int userId)
+        public async Task<ShopList> GetByIdAsyncWithProductsAsync(int id)
         {
             return await _context.ShopLists.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
@@ -36,7 +36,7 @@ namespace CustomersOrderOtomation.Data.Repository.Concrete
                 connection.Open();
                 SqlDependency.Start(connectingString);
 
-                string commandText = "select [OrderCustomerName],[OrderTableNumber],[ShopListProductsData] from dbo.ShopLists";
+                string commandText = "select [Id],[OrderCustomerName],[OrderTableNumber],[ShopListProductsData],[IsComplete] from dbo.ShopLists";
 
                 SqlCommand cmd = new SqlCommand(commandText, connection);
 
@@ -49,6 +49,8 @@ namespace CustomersOrderOtomation.Data.Repository.Concrete
                 while(reader.Read()) {
                     var shopList = new ShopList
                     {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        IsComplete = Convert.ToBoolean(reader["IsComplete"]),
                         OrderCustomerName = reader["OrderCustomerName"].ToString(),
                         OrderTableNumber = reader["OrderTableNumber"].ToString(),
                         ShopListProductsData = reader["ShopListProductsData"].ToString(),
@@ -69,5 +71,7 @@ namespace CustomersOrderOtomation.Data.Repository.Concrete
 
             hubContext.Clients.All.SendAsync("refreshShoplists");
         }
+
+
     }
 }

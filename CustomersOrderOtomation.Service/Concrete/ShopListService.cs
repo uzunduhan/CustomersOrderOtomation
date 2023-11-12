@@ -76,19 +76,39 @@ namespace CustomersOrderOtomation.Service.Concrete
 
             shopList.IsComplete = true;
 
-            genericRepository.Update(shopList);
+            try
+            {
+                shopListRepository.Update(shopList);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        
             await unitOfWork.CompleteAsync();
         }
 
         public List<ShopListViewModel> GetAllShopListsWithSignalR()
         {
-            var shopLists = shopListRepository.GetAllShopListWithSıgnalR();
+            var shopLists = shopListRepository.GetAllShopListWithSıgnalR().Where(x=>x.IsComplete == false).ToList();
 
             List<ShopListViewModel> vm = mapper.Map<List<ShopListViewModel>>(shopLists);
 
             return vm;
         }
 
+        public async Task<ShopList> GetSingleShopListByIdAsyncPure(int id)
+        {
+            var tempEntity = await shopListRepository.GetByIdAsync(id);
+
+            if (tempEntity is null)
+                throw new InvalidOperationException("shopList not found");
+
+
+
+            return tempEntity;
+        }
 
 
     }

@@ -6,13 +6,15 @@
       "wwwroot/css/aos.css",
       "wwwroot/css/owl.carousel.min.css",
       "wwwroot/css/site.css",
-      "wwwroot/css/style.css"
+      "wwwroot/css/style.css",
+      "wwwroot/css/simple-notify.min.css"
     ]
   },
 
   {
     "outputFileName": "wwwroot/js/base.js",
     "inputFiles": [
+      "wwwroot/js/simple_notify.min.js",
       "wwwroot/lib/jquery/dist/jquery.min.js",
       "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
       "wwwroot/js/admin.js",
@@ -20,6 +22,7 @@
       "wwwroot/js/aos.js",
       "wwwroot/js/uygulama.js",
       "wwwroot/js/main.js"
+
     ],
 
     "minify": {

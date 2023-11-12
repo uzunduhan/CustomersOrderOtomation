@@ -25,6 +25,10 @@
         </tbody>
     </table>
 
+     <hr />
+
+    <button type="button" class="btn btn-primary" id="buttonPrev" onclick="getPrevPage()"><i class="fa fa-arrow-left" aria-hidden="true"></i> Önceki</button>
+    <button type="button" class="btn btn-primary" id="buttonNext" onclick="getNextPage()"><i class="fa fa-arrow-right" aria-hidden="true"></i> Sonraki</button>
 
 </body>
 </html>
@@ -33,7 +37,11 @@
 
 <script type="text/javascript">
 
+    var currentPage = 1;
+    var pageSize = 10;
+
     $(() => {
+
         let connection = new signalR.HubConnectionBuilder().withUrl("/notify").build()
 
         connection.start()
@@ -44,56 +52,111 @@
 
         loadData();
 
-        function loadData() {
-            var tr = '';
 
-            $.ajax({
-                url: 'Admin/GetShopLists',
-                type: 'GET',
-                success: function (result) {
+    })
 
+    function loadData() {
+        var tr = '';
 
-
-                    $.each(result, (k, v) => {
-                        var shopListData = JSON.parse(v.shopListProductsData);
-                        var topTotalPrice = 0;
-
-                        var productHTML = "";
-                        $.each(shopListData, (index, product) => {
-                            var totalPrice = product.Piece * product.Price;
-                            topTotalPrice += totalPrice;
-                            productHTML += `<p class="badge badge-success rounded-pill d-inline">${product.Piece} ${product.ProductName}=${totalPrice} TL</p>`;
-                        });
+        $.ajax({
+            url: 'Admin/GetShopLists',
+            type: 'GET',
+            data: { page: currentPage, pageSize: pageSize },
+            success: function (result) {
 
 
+                var itemCount = 0;
 
+                $.each(result, (k, v) => {
+                    var shopListData = JSON.parse(v.shopListProductsData);
+                    var topTotalPrice = 0;
+                    itemCount++;
 
-
-                        var totalHTML = `<p class="badge badge-primary rounded-pill d-inline">Total: ${topTotalPrice} TL</p>`;
-
-                        tr += `<tr>
-                                   <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
-                                   <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
-                                   <td>${productHTML}${totalHTML}</td>
-                                       <td>
-                                           <button type="button" class="btn btn-info">
-                                              <i class="fa fa-check-square-o" aria-hidden="true"></i> Onayla
-                                       </button>
-                                    </td>
-                                 </tr>`;
+                    var productHTML = "";
+                    $.each(shopListData, (index, product) => {
+                        var totalPrice = product.Piece * product.Price;
+                        topTotalPrice += totalPrice;
+                        productHTML += `<p class="badge badge-success rounded-pill d-inline">${product.Piece} ${product.ProductName}=${totalPrice} TL</p>`;
                     });
 
 
-                    $("#tbodyShopList").html(tr);
 
 
-                },
-                error: function (exc) {
 
+                    var totalHTML = `<p class="badge badge-primary rounded-pill d-inline">Total: ${topTotalPrice} TL</p>`;
+
+                    tr += `<tr>
+                                       <td><p class="fw-normal mb-1">${v.orderCustomerName}</p></td>
+                                       <td><p class="fw-normal mb-1">${v.orderTableNumber}</p></td>
+                                       <td>${productHTML}${totalHTML}</td>
+                                           <td>
+                                               <button type="button" class="btn btn-info" onclick="siparisiTamamla(${v.id})">
+                                                  <i class="fa fa-check-square-o" aria-hidden="true"></i> Onayla
+                                           </button>
+                                        </td>
+                                     </tr>`;
+
+                                     
+                });
+
+                if (itemCount != pageSize){
+                    $("#buttonNext").prop("disabled", true);
                 }
-            });
+                else{
+                    $("#buttonNext").prop("disabled", false);
+                }
+
+
+                $("#tbodyShopList").html(tr);
+
+
+            },
+            error: function (exc) {
+
+            }
+        });
+    }
+
+    function getPrevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadData();
         }
-    })
+    }
+
+    function getNextPage() {
+        currentPage++;
+        loadData();
+    }
+
+    function siparisiTamamla(orderNumber){
+        $.ajax({
+            url: 'Admin/UpdateShopListIsCompleteTrue',
+            type: 'POST',
+            data: { orderNumber: orderNumber },
+            success: function (result) {
+                if(result == true){
+                    new Notify({
+                        title: 'Sipariş tamamlandı',
+                        text: 'Sipariş tamamlanmıştır.',
+                        status: 'success',
+                        autoclose: true,
+                        autotimeout: 2000
+                    })
+                }
+            },
+            error: function (exc) {
+                new Notify({
+                    title: 'Hata',
+                    text: 'Sipariş tamamlanırken hata oluştu.',
+                    status: 'error',
+                    autoclose: false,
+                })
+            }
+        });
+    }
+
+ 
 
 </script>
 
