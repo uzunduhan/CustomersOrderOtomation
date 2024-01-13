@@ -118,7 +118,7 @@
         if(basket != null){
 
             $.ajax({
-                url: '/Home/GetShoppingCardProducts',
+                url: '/Shop/GetShoppingCardProducts',
                 type: 'POST',
                 data: basket,
                 contentType: "application/json; charset=utf-8",
@@ -277,7 +277,7 @@
         var customerTableNumber = $("#inputCustomerTableNumber").val();
 
         $.ajax({
-            url: '/Home/AddShoppingCardProductsToShopList?cusName=' + customerName + '&cusTableNo=' + customerTableNumber,
+            url: '/Shop/AddShoppingCardProductsToShopList?cusName=' + customerName + '&cusTableNo=' + customerTableNumber,
             type: 'POST',
             data: shopList,
             contentType: "application/json; charset=utf-8",

@@ -17,7 +17,7 @@
 
                     <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
                         <div class="site-logo">
-                            <a asp-controller="Home" asp-action="Index" class="js-logo-clone">Shoppers</a>
+                            <a asp-controller="Dashboard" asp-action="Index" class="js-logo-clone">Shoppers</a>
                         </div>
                     </div>
 
@@ -25,7 +25,7 @@
                         <div class="site-top-icons">
                             <ul>
                                 <li>
-                                    <a asp-controller="Home" asp-action="ShoppingCard" class="site-cart">
+                                    <a asp-controller="Shop" asp-action="ShoppingCard" class="site-cart">
                                         <span class="icon icon-shopping_cart"></span>
                                         <span class="count" id="spnShopListProductCount"></span>
                                     </a>
@@ -42,11 +42,11 @@
             <div class="container">
                 <ul class="site-menu js-clone-nav d-none d-md-block">
                     <li>
-                        <a asp-controller="Home" asp-action="Index">Home</a>
+                        <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                     </li>
 
                     <li>
-                        <a asp-controller="Home" asp-action="Shop">Shop</a>
+                        <a asp-controller="Product" asp-action="Shop">Shop</a>
                     </li>
 
                 </ul>

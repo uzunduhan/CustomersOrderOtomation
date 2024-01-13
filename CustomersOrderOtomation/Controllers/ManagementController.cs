@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using CustomersOrderOtomation.Data.Models;
 using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomersOrderOtomation.Controllers
 {
-    public class AdminController : Controller
+    public class ManagementController : Controller
     {
         private readonly IMapper mapper;
 
         public IShopListService ShopListService { get; }
 
-        public AdminController(IShopListService shopListService, IMapper mapper) 
+        public ManagementController(IShopListService shopListService, IMapper mapper)
         {
             ShopListService = shopListService;
             this.mapper = mapper;
@@ -23,20 +22,20 @@ namespace CustomersOrderOtomation.Controllers
         }
 
         [HttpGet]
-        public List<ShopListViewModel> GetShopLists(int page = 1, int pageSize = 10) 
+        public List<ShopListViewModel> GetShopLists(int page = 1, int pageSize = 10)
         {
-           var dataList = ShopListService.GetAllShopListsWithSignalR().Skip((page -1)*pageSize).Take(pageSize).ToList();
-          
+            var dataList = ShopListService.GetAllShopListsWithSignalR().Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
             return dataList;
         }
 
-        public IActionResult AdminProduct()
+        public IActionResult ManageProduct()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<bool> UpdateShopListIsCompleteTrue(int orderNumber) 
+        public async Task<bool> UpdateShopListIsCompleteTrue(int orderNumber)
         {
             try
             {
@@ -56,7 +55,7 @@ namespace CustomersOrderOtomation.Controllers
 
 
 
-           
+
         }
     }
 }

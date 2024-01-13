@@ -14,20 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="bundleconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="bundleconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\scss\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="bundleconfig.json" />
   </ItemGroup>
 
   <ItemGroup>

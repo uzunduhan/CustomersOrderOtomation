@@ -1,6 +1,6 @@
 function getCategoriesForShopPage() {
     $.ajax({
-        url: '/Home/GetCategories',
+        url: '/Category/GetCategories',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
