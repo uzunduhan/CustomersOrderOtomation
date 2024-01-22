@@ -26,8 +26,8 @@
     ],
 
     "minify": {
-      "enabled": true,
-      "renameLocals": true
+      "enabled": false,
+      "renameLocals": false
     }
   }
 ]
