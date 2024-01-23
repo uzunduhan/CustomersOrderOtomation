@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using CustomersOrderOtomation.Operations;
 using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
@@ -7,26 +7,16 @@ namespace CustomersOrderOtomation.Controllers
 {
     public class ManagementController : Controller
     {
-        private readonly IMapper mapper;
 
         public IShopListService ShopListService { get; }
 
-        public ManagementController(IShopListService shopListService, IMapper mapper)
+        public ManagementController(IShopListService shopListService)
         {
             ShopListService = shopListService;
-            this.mapper = mapper;
         }
         public IActionResult Index()
         {
             return View();
-        }
-
-        [HttpGet]
-        public List<ShopListViewModel> GetShopLists(int page = 1, int pageSize = 10)
-        {
-            var dataList = ShopListService.GetAllShopListsWithSignalR().Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            return dataList;
         }
 
         public IActionResult ManageProduct()
@@ -34,28 +24,19 @@ namespace CustomersOrderOtomation.Controllers
             return View();
         }
 
+        [HttpGet]
+        public List<ShopListViewModel> GetShopLists(int page = 1, int pageSize = 10)
+        {
+            clsManagementBusiness managementBusiness = new clsManagementBusiness(ShopListService);
+            return managementBusiness.GetShopLists(page, pageSize);
+        }
+
+
         [HttpPost]
         public async Task<bool> UpdateShopListIsCompleteTrue(int orderNumber)
         {
-            try
-            {
-                var shop = await ShopListService.GetSingleShopListByIdAsyncPure(orderNumber);
-
-                if (shop != null)
-                {
-                    ShopListService.CheckIsCompleteColumnForShopList(shop);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-
-
-
+            clsManagementBusiness managementBusiness = new clsManagementBusiness(ShopListService);
+            return await managementBusiness.UpdateShopListIsCompleteTrue(orderNumber);
         }
     }
 }

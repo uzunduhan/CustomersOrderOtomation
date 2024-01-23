@@ -1,4 +1,5 @@
-﻿using CustomersOrderOtomation.Service.Abstract;
+﻿using CustomersOrderOtomation.Operations;
+using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.Category;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,8 @@ namespace CustomersOrderOtomation.Controllers
         }
         public async Task<List<CategoryViewModel>> GetCategories()
         {
-            return await categoryService.GetAllCategories();
+            clsCategoryBusiness categoryBusiness = new clsCategoryBusiness(categoryService);
+            return await categoryBusiness.GetCategories();
         }
     }
 }
