@@ -13,5 +13,8 @@ namespace CustomersOrderOtomation.Service.Abstract
         Task CheckIsCompleteColumnForShopList(ShopList shopList);
         List<ShopListViewModel> GetAllShopListsWithSignalR();
         Task<ShopList> GetSingleShopListByIdAsyncPure(int id);
+        Task<List<ShopListViewModel>> GetShopLists(int page, int pageSize);
+        Task<bool> UpdateShopListIsCompleteTrue(int orderNumber);
+        Task<bool> AddShoppingCardProductsToShopList(string cusName, string cusTableNo, List<ShopListAddShoppingCardProductsDto> dto);
     }
 }

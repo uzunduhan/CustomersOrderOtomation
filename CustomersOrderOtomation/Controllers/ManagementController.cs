@@ -1,5 +1,4 @@
-﻿using CustomersOrderOtomation.Operations;
-using CustomersOrderOtomation.Service.Abstract;
+﻿using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +6,9 @@ namespace CustomersOrderOtomation.Controllers
 {
     public class ManagementController : Controller
     {
-
-        public IShopListService ShopListService { get; }
-
-        public ManagementController(IShopListService shopListService)
+        public ManagementController()
         {
-            ShopListService = shopListService;
+
         }
         public IActionResult Index()
         {
@@ -25,18 +21,16 @@ namespace CustomersOrderOtomation.Controllers
         }
 
         [HttpGet]
-        public List<ShopListViewModel> GetShopLists(int page = 1, int pageSize = 10)
+        public async Task<List<ShopListViewModel>> GetShopLists([FromServices] IShopListService shopListService, int page = 1, int pageSize = 10)
         {
-            clsManagementBusiness managementBusiness = new clsManagementBusiness(ShopListService);
-            return managementBusiness.GetShopLists(page, pageSize);
+            return await shopListService.GetShopLists(page, pageSize);
         }
 
 
         [HttpPost]
-        public async Task<bool> UpdateShopListIsCompleteTrue(int orderNumber)
+        public async Task<bool> UpdateShopListIsCompleteTrue([FromServices] IShopListService shopListService, int orderNumber)
         {
-            clsManagementBusiness managementBusiness = new clsManagementBusiness(ShopListService);
-            return await managementBusiness.UpdateShopListIsCompleteTrue(orderNumber);
+            return await shopListService.UpdateShopListIsCompleteTrue(orderNumber);
         }
     }
 }

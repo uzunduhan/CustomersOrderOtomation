@@ -10,6 +10,8 @@ namespace CustomersOrderOtomation.Service.Abstract
         Task UpdateProductAsync(int id, ProductDto updateResource);
         Task DeleteProductAsync(int id);
         Task AddProductAsync(ProductDto updateResource);
+        Task<List<ProductViewModel>> GetProductsByCategory(int categoryId);
+        Task<List<ProductForGetShopListDto>> GetShoppingCardProducts(List<ProductForAddShopListDto> prod);
 
     }
 }

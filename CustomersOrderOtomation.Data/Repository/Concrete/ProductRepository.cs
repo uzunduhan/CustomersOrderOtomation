@@ -20,5 +20,10 @@ namespace CustomersOrderOtomation.Data.Repository.Concrete
         {
             return await _context.Products.Include(x => x.Product_Categories).ThenInclude(x=>x.Category).ToListAsync();
         }
+
+        public async Task<List<Product>> GetAllProductsByCategory(int categoryId)
+        {
+            return await _context.ProductCategories.Where(x => x.CategoryId == categoryId).Select(x => x.Product).ToListAsync();
+        }
     }
 }

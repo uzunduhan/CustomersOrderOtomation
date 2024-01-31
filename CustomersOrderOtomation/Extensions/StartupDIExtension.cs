@@ -16,6 +16,8 @@ namespace CustomersOrderOtomation.Extensions
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IHelper, Helper>();
+
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             services.AddScoped<IGenericRepository<ShopList>, GenericRepository<ShopList>>();

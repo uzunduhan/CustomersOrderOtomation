@@ -5,6 +5,7 @@ using CustomersOrderOtomation.Data.UnitOfWork.Abstract;
 using CustomersOrderOtomation.Dto.Dtos;
 using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.ShopList;
+using System.Text.Json;
 
 namespace CustomersOrderOtomation.Service.Concrete
 {
@@ -108,6 +109,56 @@ namespace CustomersOrderOtomation.Service.Concrete
 
 
             return tempEntity;
+        }
+
+        public async Task<List<ShopListViewModel>> GetShopLists(int page, int pageSize)
+        {
+            var dataList = GetAllShopListsWithSignalR().Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return dataList;
+        }
+
+        public async Task<bool> UpdateShopListIsCompleteTrue(int orderNumber)
+        {
+            try
+            {
+                var shop = await GetSingleShopListByIdAsyncPure(orderNumber);
+
+                if (shop != null)
+                {
+                    CheckIsCompleteColumnForShopList(shop);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<bool> AddShoppingCardProductsToShopList(string cusName, string cusTableNo, List<ShopListAddShoppingCardProductsDto> dto)
+        {
+
+            ShopListDto shopListDto = new ShopListDto()
+            {
+                OrderCustomerName = cusName,
+                OrderTableNumber = cusTableNo,
+                ShopListProductsData = JsonSerializer.Serialize(dto)
+            };
+
+            try
+            {
+                await AddShopListAsync(shopListDto);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+            return true;
         }
 
 

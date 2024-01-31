@@ -14,13 +14,16 @@ namespace CustomersOrderOtomation.Service.Concrete
         private readonly IProductRepository productRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IHelper helper;
 
-        public ProductService(IGenericRepository<Product> genericRepository, IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IGenericRepository<Product> genericRepository, IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper,
+            IHelper helper)
         {
             this.genericRepository = genericRepository;
             this.productRepository = productRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.helper = helper;
         }
 
         public async Task AddProductAsync(ProductDto updateResource)
@@ -71,6 +74,45 @@ namespace CustomersOrderOtomation.Service.Concrete
 
             genericRepository.Update(mapped);
             await unitOfWork.CompleteAsync();
+        }
+
+        public async Task<List<ProductViewModel>> GetProductsByCategory(int categoryId)
+        {
+            var products = await productRepository.GetAllProductsByCategory(categoryId);
+            var vm = await helper.ProductListToProductViewModel(products, mapper);
+
+            return vm;
+        }
+
+        public async Task<List<ProductForGetShopListDto>> GetShoppingCardProducts(List<ProductForAddShopListDto> prod)
+        {
+            List<ProductForGetShopListDto> productDetailViewModels = new List<ProductForGetShopListDto>();
+
+            var prodList = prod
+                .GroupBy(p => p.productId)
+                 .Select(group => new
+                 {
+                     productId = group.Key,
+                     piece = group.Sum(p => p.piece)
+                 }).ToList();
+
+            foreach (var product in prodList)
+            {
+                var getProduct = await GetSingleProductByIdAsync(product.productId);
+
+                ProductForGetShopListDto productForGetShopListDto = new ProductForGetShopListDto()
+                {
+                    Price = getProduct.Price,
+                    Name = getProduct.Name,
+                    Id = getProduct.Id,
+                    Piece = product.piece
+
+                };
+
+                productDetailViewModels.Add(productForGetShopListDto);
+            }
+
+            return productDetailViewModels;
         }
     }
 }
