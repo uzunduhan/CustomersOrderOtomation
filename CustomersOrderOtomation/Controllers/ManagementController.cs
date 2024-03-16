@@ -15,9 +15,11 @@ namespace CustomersOrderOtomation.Controllers
             return View();
         }
 
-        public IActionResult ManageProduct()
+        public async Task<IActionResult> ManageProduct([FromServices] IProductService productService)
         {
-            return View();
+            var products = await productService.GetAllProductsForManagement();
+
+            return View(products);
         }
 
         [HttpGet]
@@ -31,6 +33,12 @@ namespace CustomersOrderOtomation.Controllers
         public async Task<bool> UpdateShopListIsCompleteTrue([FromServices] IShopListService shopListService, int orderNumber)
         {
             return await shopListService.UpdateShopListIsCompleteTrue(orderNumber);
+        }
+
+        [HttpPost]
+        public async Task<bool> CreateOrUpdateProduct(IFormCollection parameters, [FromServices] IProductService productService)
+        {
+            return await productService.CreateOrUpdateProductAsync(parameters); 
         }
     }
 }
