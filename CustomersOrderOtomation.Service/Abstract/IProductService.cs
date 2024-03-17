@@ -14,7 +14,6 @@ namespace CustomersOrderOtomation.Service.Abstract
         Task<List<ProductViewModel>> GetProductsByCategory(int categoryId);
         Task<List<ProductForGetShopListDto>> GetShoppingCardProducts(List<ProductForAddShopListDto> prod);
         Task<List<ProductViewModelManagement>> GetAllProductsForManagement();
-        Task<bool> CreateOrUpdateProductAsync(IFormCollection parameters);
 
     }
 }

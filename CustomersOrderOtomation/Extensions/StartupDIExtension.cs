@@ -21,16 +21,19 @@ namespace CustomersOrderOtomation.Extensions
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             services.AddScoped<IGenericRepository<ShopList>, GenericRepository<ShopList>>();
+            services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
 
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopListService, ShopListService>();
+            services.AddScoped<IManagemenetService, ManagementService>();
 
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopListRepository, ShopListRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 
             // mapper
             var mapperConfig = new MapperConfiguration(cfg =>

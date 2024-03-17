@@ -36,9 +36,9 @@ namespace CustomersOrderOtomation.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> CreateOrUpdateProduct(IFormCollection parameters, [FromServices] IProductService productService)
+        public async Task<bool> CreateOrUpdateProduct(IFormCollection parameters, [FromServices] IManagemenetService managementService)
         {
-            return await productService.CreateOrUpdateProductAsync(parameters); 
+            return await managementService.CreateOrUpdateProductAsyncManagement(parameters); 
         }
     }
 }

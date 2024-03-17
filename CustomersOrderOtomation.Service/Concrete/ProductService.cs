@@ -5,7 +5,6 @@ using CustomersOrderOtomation.Data.UnitOfWork.Abstract;
 using CustomersOrderOtomation.Dto.Dtos;
 using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.Product;
-using Microsoft.AspNetCore.Http;
 using System.Data;
 
 namespace CustomersOrderOtomation.Service.Concrete
@@ -126,51 +125,8 @@ namespace CustomersOrderOtomation.Service.Concrete
             return productDetailViewModels;
         }
 
-        public async Task<bool> CreateOrUpdateProductAsync(IFormCollection parameters)
-        {
-            try
-            {
-                var productIdPar = parameters["productId"];
-                int productId = 0;
-
-                if (productIdPar.Count > 0)
-                {
-                    productId = Convert.ToInt32(productIdPar[0]);
-                }
-
-                string productName = parameters["productName"][0] ?? "";
-
-                float productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
-                         float.TryParse(parameters["productPrice"][0], out float price)
-                         ? price
-                         : 0;
-
-                var productForExistingControl = await GetSingleProductByIdAsync(productId);
-
-                ProductDto productDto = new ProductDto()
-                {
-                    Name = productName,
-                    Price = productPrice,
-                };
-
-                if (productForExistingControl != null)
-                {
-                    await UpdateProductAsync(productId, productDto);
-                }
-                else
-                {
-                    await AddProductAsync(productDto);
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
 
 
-
-            return true;
-        }
     }
 
 
