@@ -174,7 +174,7 @@ function AddNewProduct() {
 
 function loadProducts() {
     $.ajax({
-        url: '/Management/GetAllProducts', // API endpoint
+        url: '/Management/GetAllProducts', 
         method: 'GET',
         success: function (response) {
             // Tabloyu temizle

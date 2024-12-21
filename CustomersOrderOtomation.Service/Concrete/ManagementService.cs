@@ -4,6 +4,7 @@ using CustomersOrderOtomation.Data.Repository.Abstract;
 using CustomersOrderOtomation.Dto.Dtos;
 using CustomersOrderOtomation.Service.Abstract;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace CustomersOrderOtomation.Service.Concrete
 {
@@ -38,12 +39,11 @@ namespace CustomersOrderOtomation.Service.Concrete
 
                 string productName = parameters["productName"][0] ?? "";
 
-                float productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
-                         float.TryParse(parameters["productPrice"][0], out float price)
-                         ? price
-                         : 0;
+                double productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
+                                       double.TryParse(parameters["productPrice"][0], NumberStyles.Any, CultureInfo.CurrentCulture, out double price)
+                                       ? price
+                                        : 0;
 
-                int productCategoryId = Convert.ToInt32(parameters["productCategoryId"][0]);
 
                 var productForExistingControl = await productRepository.GetByIdAsync(productId);
 
@@ -53,23 +53,14 @@ namespace CustomersOrderOtomation.Service.Concrete
                     Price = productPrice,
                 };
 
-                ProductCategory productCategory = new ProductCategory()
-                {
-                    Product = productForExistingControl.Product_Categories.FirstOrDefault().Product,
-                    Category = productForExistingControl.Product_Categories.FirstOrDefault().Category
-                };
-
-                productCategory.Category.Id = 1;
 
                 if (productForExistingControl != null)
                 {
                     await productService.UpdateProductAsync(productId, productDto);
-                    productCategoryRepository.Update(productCategory);
                 }
                 else
                 {
                     await productService.AddProductAsync(productDto);
-                    await productCategoryRepository.InsertAsync(productCategory);
                 }
 
 
