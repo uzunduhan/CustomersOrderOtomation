@@ -7,6 +7,7 @@ using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.Product;
 using Microsoft.AspNetCore.Http;
 using System.Data;
+using System.Globalization;
 
 namespace CustomersOrderOtomation.Service.Concrete
 {
@@ -139,11 +140,12 @@ namespace CustomersOrderOtomation.Service.Concrete
                 }
 
                 string productName = parameters["productName"][0] ?? "";
+                bool productStatus = Convert.ToBoolean(parameters["productStatus"][0]);
 
-                float productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
-                         float.TryParse(parameters["productPrice"][0], out float price)
-                         ? price
-                         : 0;
+                double productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
+                                      double.TryParse(parameters["productPrice"][0], NumberStyles.Any, CultureInfo.InvariantCulture, out double price)
+                                      ? price
+                                      : 0;
 
                 var productForExistingControl = await GetSingleProductByIdAsync(productId);
 
@@ -151,6 +153,7 @@ namespace CustomersOrderOtomation.Service.Concrete
                 {
                     Name = productName,
                     Price = productPrice,
+                    IsActive = productStatus,
                 };
 
                 if (productForExistingControl != null)
@@ -159,6 +162,7 @@ namespace CustomersOrderOtomation.Service.Concrete
                 }
                 else
                 {
+                    productDto.CreatedAt = DateTime.Now;
                     await AddProductAsync(productDto);
                 }
             }
@@ -170,6 +174,15 @@ namespace CustomersOrderOtomation.Service.Concrete
 
 
             return true;
+        }
+
+        public async Task<ProductViewModelManagement> GetSingleProductByIdForManagement(int id)
+        {
+            var product = await productRepository.GetByIdAsync(id);
+
+            ProductViewModelManagement vm = mapper.Map<ProductViewModelManagement>(product);
+
+            return vm;
         }
     }
 

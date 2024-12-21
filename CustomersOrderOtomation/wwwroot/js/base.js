@@ -41,11 +41,38 @@ function getCategoriesForShopPage() {
 
 function EditThisProduct(productId) {
     $("#hdnProductIdProductModal").val(productId);
-    $("#productCreateEditModal").css("display", "block");
+
+    $.ajax({
+        url: '/Management/GetSingleProductByIdForManagement',
+        type: 'GET',
+        data: { productId: productId },
+        dataType: 'json',
+        success: function (data) {
+
+            if (data != null) {
+
+                $("#inProductNameProductModal").val(data.name);
+                $("#inProductPriceProductModal").val(data.price);
+                $("#drpProductStatus").val(data.isActive.toString());
+                ShowModal('productCreateEditModal');
+            }
+
+
+        },
+        error: function (exc) {
+
+        }
+    });
 }
 
-function CloseModal(modalName) {
-    $("#" + modalName).css("display", "none");
+function CloseModal(modalId) {
+    const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+}
+
+function ShowModal(modalId) {
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
 }
 
 function SaveProductInformation() {
@@ -81,37 +108,41 @@ function SaveProductInformation() {
     }
 
     var productId = $("#hdnProductIdProductModal").val();
+    var productStatus = $("#drpProductStatus").val();
 
     var formData = {
         productId: productId,
         productName: productName,
-        productPrice: productPrice
+        productPrice: productPrice,
+        productStatus: productStatus
     };
 
     $.ajax({
         url: '/Management/CreateOrUpdateProduct',
         type: 'POST',
         data: formData,
- 
+
         success: function (data) {
 
-            if (data = "basarili") {
-
-
+            if (data) {
                 new Notify({
-                    title: 'Sipariş Onaylandı',
-                    text: 'Siparişiniz alınmıştır.',
+                    title: 'Ürün Bilgileri Kaydedildi',
+                    text: 'Ürün Bilgileri Kaydedildi.',
                     status: 'success',
                     autoclose: true,
                     autotimeout: 2000
                 })
+
+                CloseModal("productCreateEditModal");
+
+                loadProducts();
 
             }
 
             else {
                 new Notify({
                     title: 'Hata',
-                    text: 'Sipariş Alınırken Hata Oluştu.',
+                    text: 'Ürün Bilgileri Kaydedilirken Hata Oluştu.',
                     status: 'error',
                     autoclose: false,
                 })
@@ -123,10 +154,61 @@ function SaveProductInformation() {
         error: function (exc) {
             new Notify({
                 title: 'Hata',
-                text: 'Sipariş Alınırken Hata Oluştu.',
+                text: 'Ürün Bilgileri Kaydedilirken Hata Oluştu.',
                 status: 'error',
                 autoclose: false,
             })
+        }
+    });
+}
+
+function EditThisCategory(categoryId) {
+    $("#hdnCategoryIdProductModal").val(categoryId);
+    $("#categoryCreateEditModal").css("display", "block");
+}
+
+function AddNewProduct() {
+    $("#hdnProductIdProductModal").val(0);
+    ShowModal('productCreateEditModal');
+}
+
+function loadProducts() {
+    $.ajax({
+        url: '/Management/GetAllProducts', // API endpoint
+        method: 'GET',
+        success: function (response) {
+            // Tabloyu temizle
+            $('#productsTable tbody').empty();
+
+            // Veriyi tabloya ekle
+            response.forEach(function (item) {
+                var row = `<tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">${item.name}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">${item.price} TL</p>
+                        </td>
+                        <td>
+                            <span class="badge ${item.isActive ? 'bg-success' : 'bg-danger'}">
+                                ${item.isActive ? 'Yes' : 'No'}
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="EditThisProduct(${item.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </td>
+                    </tr>`;
+                $('#productsTable tbody').append(row);
+            });
+        },
+        error: function () {
+            alert("Error loading products");
         }
     });
 }

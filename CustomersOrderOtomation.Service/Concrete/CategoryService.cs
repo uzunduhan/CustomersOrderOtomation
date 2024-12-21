@@ -74,5 +74,14 @@ namespace CustomersOrderOtomation.Service.Concrete
             genericRepository.Update(mapped);
             await unitOfWork.CompleteAsync();
         }
+
+        public async Task<List<CategoryViewModelManagement>> GetAllCategoriesForManagement()
+        {
+            var categories = await categoryRepository.GetAllAsync();
+
+            List<CategoryViewModelManagement> vm = mapper.Map<List<CategoryViewModelManagement>>(categories);
+
+            return vm;
+        }
     }
 }

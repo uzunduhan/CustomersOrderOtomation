@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@model List<CustomersOrderOtomation.ViewModel.Category.CategoryViewModelManagement>
+
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+        <tr>
+            <th>Name</th>
+            <th>Is It On Active?</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1">@item.Name</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1">
+                        @item.IsActive
+                    </p>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link btn-sm btn-rounded" onclick="EditThisCategory(@item.Id)">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<div id="categoryCreateEditModal" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close" onclick="CloseModal('categoryCreateEditModal')">&times;</span>
+        <div>
+            <input type="hidden" id="hdnCategoryIdProductModal" />
+
+            <div class="row" style="margin-top:1%">
+                <div class="col-lg-1">Product Name</div>
+                <div class="col-lg-6">
+                    <input type="text" class="form-control" id="inCategoryNameProductModal" placeholder="category name">
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:1%">
+                <div class="col-lg-1">Is Active</div>
+                <div class="col-lg-6">
+                    <select class="form-select" aria-label="is active">
+                        <option selected value="1">True</option>
+                        <option value="2">False</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:1%">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-primary" onclick="SaveCategoryInformation()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

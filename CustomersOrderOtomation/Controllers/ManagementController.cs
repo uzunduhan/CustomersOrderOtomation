@@ -1,4 +1,5 @@
 ﻿using CustomersOrderOtomation.Service.Abstract;
+using CustomersOrderOtomation.ViewModel.Product;
 using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,13 @@ namespace CustomersOrderOtomation.Controllers
             return View(products);
         }
 
+        public async Task<IActionResult> ManageCategory([FromServices] ICategoryService categoryService)
+        {
+            var categories = await categoryService.GetAllCategoriesForManagement();
+
+            return View(categories);
+        }
+
         [HttpGet]
         public async Task<List<ShopListViewModel>> GetShopLists([FromServices] IShopListService shopListService, int page = 1, int pageSize = 10)
         {
@@ -39,6 +47,21 @@ namespace CustomersOrderOtomation.Controllers
         public async Task<bool> CreateOrUpdateProduct(IFormCollection parameters, [FromServices] IProductService productService)
         {
             return await productService.CreateOrUpdateProductAsync(parameters); 
+        }
+
+        public async Task<ProductViewModelManagement> GetSingleProductByIdForManagement([FromServices] IProductService productService, int productId)
+        {
+            var product = await productService.GetSingleProductByIdForManagement(productId);
+
+            return product;
+        }
+
+        [HttpGet]
+        public async Task<List<ProductViewModelManagement>> GetAllProducts([FromServices] IProductService productService)
+        {
+            var products = await productService.GetAllProductsForManagement();
+
+            return products;
         }
     }
 }
