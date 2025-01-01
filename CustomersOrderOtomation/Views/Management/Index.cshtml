@@ -59,7 +59,7 @@
         var tr = '';
 
         $.ajax({
-            url: 'Admin/GetShopLists',
+            url: 'Management/GetShopLists',
             type: 'GET',
             data: { page: currentPage, pageSize: pageSize },
             success: function (result) {

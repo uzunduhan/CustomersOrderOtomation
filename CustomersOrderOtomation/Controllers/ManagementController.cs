@@ -1,4 +1,5 @@
 ﻿using CustomersOrderOtomation.Service.Abstract;
+using CustomersOrderOtomation.ViewModel.Category;
 using CustomersOrderOtomation.ViewModel.Product;
 using CustomersOrderOtomation.ViewModel.ShopList;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,16 @@ namespace CustomersOrderOtomation.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ManageProduct([FromServices] IProductService productService)
+        public async Task<IActionResult> ManageProduct([FromServices] IManagemenetService managementService)
         {
-            var products = await productService.GetAllProductsForManagement();
+            var products = await managementService.GetAllProductsForManagement();
 
             return View(products);
         }
 
-        public async Task<IActionResult> ManageCategory([FromServices] ICategoryService categoryService)
+        public async Task<IActionResult> ManageCategory([FromServices] IManagemenetService managementService)
         {
-            var categories = await categoryService.GetAllCategoriesForManagement();
+            var categories = await managementService.GetAllCategoriesForManagement();
 
             return View(categories);
         }
@@ -49,19 +50,39 @@ namespace CustomersOrderOtomation.Controllers
             return await managementService.CreateOrUpdateProductAsyncManagement(parameters); 
         }
 
-        public async Task<ProductViewModelManagement> GetSingleProductByIdForManagement([FromServices] IProductService productService, int productId)
+        public async Task<ProductViewModelManagement> GetSingleProductByIdForManagement([FromServices] IManagemenetService managementService, int productId)
         {
-            var product = await productService.GetSingleProductByIdForManagement(productId);
+            var product = await managementService.GetSingleProductByIdForManagement(productId);
 
             return product;
         }
 
         [HttpGet]
-        public async Task<List<ProductViewModelManagement>> GetAllProducts([FromServices] IProductService productService)
+        public async Task<List<ProductViewModelManagement>> GetAllProducts([FromServices] IManagemenetService managementService)
         {
-            var products = await productService.GetAllProductsForManagement();
+            var products = await managementService.GetAllProductsForManagement();
 
             return products;
+        }
+
+        public async Task<CategoryViewModelManagement> GetSingleCategoryByIdForManagement([FromServices] IManagemenetService managementService, int categoryId)
+        {
+            var product = await managementService.GetSingleCategoryByIdForManagement(categoryId);
+
+            return product;
+        }
+
+        [HttpPost]
+        public async Task<bool> CreateOrUpdateCategory(IFormCollection parameters, [FromServices] IManagemenetService managementService)
+        {
+            return await managementService.CreateOrUpdateCategoryAsyncManagement(parameters);
+        }
+
+        public async Task<List<CategoryViewModelManagement>> GetAllCategories([FromServices] IManagemenetService managementService)
+        {
+            var categories = await managementService.GetAllCategoriesForManagement();
+
+            return categories;
         }
     }
 }

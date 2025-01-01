@@ -57,14 +57,7 @@ namespace CustomersOrderOtomation.Service.Concrete
             return vm;
         }
 
-        public async Task<List<ProductViewModelManagement>> GetAllProductsForManagement()
-        {
-            var products = await productRepository.GetAllAsync();
-
-            List<ProductViewModelManagement> vm = mapper.Map<List<ProductViewModelManagement>>(products);
-
-            return vm;
-        }
+     
 
         public async Task<ProductDetailViewModel> GetSingleProductByIdAsync(int id)
         {
@@ -176,14 +169,6 @@ namespace CustomersOrderOtomation.Service.Concrete
             return true;
         }
 
-        public async Task<ProductViewModelManagement> GetSingleProductByIdForManagement(int id)
-        {
-            var product = await productRepository.GetByIdAsync(id);
-
-            ProductViewModelManagement vm = mapper.Map<ProductViewModelManagement>(product);
-
-            return vm;
-        }
     }
 
 

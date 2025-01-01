@@ -25,6 +25,8 @@ namespace MyProductList.Service.Mapper
 
             CreateMap<Product, ProductViewModelManagement>();
 
+            CreateMap<Category, CategoryViewModelManagement>();
+
             CreateMap<Category, CategoryForProductViewModel>();
 
 

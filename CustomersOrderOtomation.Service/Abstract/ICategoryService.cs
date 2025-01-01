@@ -10,6 +10,5 @@ namespace CustomersOrderOtomation.Service.Abstract
         Task UpdateCategoryAsync(int id, CategoryDto updateResource);
         Task AddCategoryAsync(CategoryDto updateResource);
         Task SafeDeleteCategorytAsync(int id);
-        Task<List<CategoryViewModelManagement>> GetAllCategoriesForManagement();
     }
 }

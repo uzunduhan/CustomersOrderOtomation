@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CustomersOrderOtomation.Data.Models;
 using CustomersOrderOtomation.Data.Repository.Abstract;
+using CustomersOrderOtomation.Data.Repository.Concrete;
 using CustomersOrderOtomation.Data.UnitOfWork.Abstract;
 using CustomersOrderOtomation.Dto.Dtos;
 using CustomersOrderOtomation.Service.Abstract;
 using CustomersOrderOtomation.ViewModel.Category;
+using CustomersOrderOtomation.ViewModel.Product;
 
 namespace CustomersOrderOtomation.Service.Concrete
 {
@@ -75,13 +77,5 @@ namespace CustomersOrderOtomation.Service.Concrete
             await unitOfWork.CompleteAsync();
         }
 
-        public async Task<List<CategoryViewModelManagement>> GetAllCategoriesForManagement()
-        {
-            var categories = await categoryRepository.GetAllAsync();
-
-            List<CategoryViewModelManagement> vm = mapper.Map<List<CategoryViewModelManagement>>(categories);
-
-            return vm;
-        }
     }
 }

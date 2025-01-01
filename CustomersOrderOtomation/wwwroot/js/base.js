@@ -162,9 +162,101 @@ function SaveProductInformation() {
     });
 }
 
+function SaveCategoryInformation() {
+
+    var categoryName = $("#inCategoryNameCategoryModal").val();
+
+    if (categoryName == "" || categoryName.length < 3) {
+
+        new Notify({
+            title: 'Hata',
+            text: 'Categoy name must be 3 character or more. ',
+            status: 'error',
+            autoclose: false,
+        })
+
+        return false;
+    }
+
+    var categoryId = $("#hdnCategoryIdCategoryModal").val();
+    var categoryStatus = $("#drpCategoryStatus").val();
+
+    var formData = {
+        categoryId: categoryId,
+        categoryName: categoryName,
+        categoryStatus: categoryStatus
+    };
+
+    $.ajax({
+        url: '/Management/CreateOrUpdateCategory',
+        type: 'POST',
+        data: formData,
+
+        success: function (data) {
+
+            if (data) {
+                new Notify({
+                    title: 'Kategori Bilgileri Kaydedildi',
+                    text: 'Kategori Bilgileri Kaydedildi.',
+                    status: 'success',
+                    autoclose: true,
+                    autotimeout: 2000
+                })
+
+                CloseModal("categoryCreateEditModal");
+
+                loadCategories();
+
+        
+
+            }
+
+            else {
+                new Notify({
+                    title: 'Hata',
+                    text: 'Kategori Bilgileri Kaydedilirken Hata Oluştu.',
+                    status: 'error',
+                    autoclose: false,
+                })
+            }
+
+
+
+        },
+        error: function (exc) {
+            new Notify({
+                title: 'Hata',
+                text: 'Kategori Bilgileri Kaydedilirken Hata Oluştu.',
+                status: 'error',
+                autoclose: false,
+            })
+        }
+    });
+}
+
 function EditThisCategory(categoryId) {
-    $("#hdnCategoryIdProductModal").val(categoryId);
-    $("#categoryCreateEditModal").css("display", "block");
+    $("#hdnCategoryIdCategoryModal").val(categoryId);
+
+    $.ajax({
+        url: '/Management/GetSingleCategoryByIdForManagement',
+        type: 'GET',
+        data: { categoryId: categoryId },
+        dataType: 'json',
+        success: function (data) {
+
+            if (data != null) {
+
+                $("#inCategoryNameCategoryModal").val(data.name);
+                $("#drpCategoryStatus").val(data.isActive.toString());
+                ShowModal('categoryCreateEditModal');
+            }
+
+        },
+        error: function (exc) {
+
+        }
+    });
+
 }
 
 function AddNewProduct() {
@@ -211,6 +303,49 @@ function loadProducts() {
             alert("Error loading products");
         }
     });
+}
+
+function loadCategories() {
+    $.ajax({
+        url: '/Management/GetAllCategories',
+        method: 'GET',
+        success: function (response) {
+            // Tabloyu temizle
+            $('#categoriesTable tbody').empty();
+
+            // Veriyi tabloya ekle
+            response.forEach(function (item) {
+                var row = `<tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">${item.name}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge ${item.isActive ? 'bg-success' : 'bg-danger'}">
+                                ${item.isActive ? 'Yes' : 'No'}
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="EditThisCategory(${item.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </td>
+                    </tr>`;
+                $('#categoriesTable tbody').append(row);
+            });
+        },
+        error: function () {
+            alert("Error loading products");
+        }
+    });
+}
+
+function AddNewCategory() {
+    $("#hdnCategoryIdCategoryModal").val(0);
+    ShowModal('categoryCreateEditModal');
 }
  AOS.init({
  	duration: 800,
