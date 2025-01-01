@@ -33,6 +33,7 @@ namespace CustomersOrderOtomation.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopListRepository, ShopListRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IStorageService, StorageService>();
 
 
             // mapper

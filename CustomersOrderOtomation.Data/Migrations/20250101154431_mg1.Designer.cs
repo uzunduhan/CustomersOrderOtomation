@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomersOrderOtomation.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240113094321_mg1")]
+    [Migration("20250101154431_mg1")]
     partial class mg1
     {
         /// <inheritdoc />
@@ -63,6 +63,9 @@ namespace CustomersOrderOtomation.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActive")

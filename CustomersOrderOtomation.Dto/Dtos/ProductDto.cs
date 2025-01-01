@@ -10,5 +10,8 @@ namespace CustomersOrderOtomation.Dto.Dtos
 
         [Required]
         public double? Price { get; set; }
+
+        [Required]
+        public string? ImageUrl { get; set; }
     }
 }

@@ -18,9 +18,10 @@ namespace CustomersOrderOtomation.Service.Concrete
         private readonly IMapper mapper;
         private readonly IProductService productService;
         private readonly ICategoryService categoryService;
+        private readonly IStorageService storageService;
 
         public ManagementService(ICategoryRepository categoryRepository, IProductRepository productRepository, IGenericRepository<ProductCategory> productCategoryRepository,
-            IMapper mapper, IProductService productService, ICategoryService categoryService)
+            IMapper mapper, IProductService productService, ICategoryService categoryService, IStorageService storageService)
         {
             this.categoryRepository = categoryRepository;
             this.productRepository = productRepository;
@@ -28,6 +29,7 @@ namespace CustomersOrderOtomation.Service.Concrete
             this.mapper = mapper;
             this.productService = productService;
             this.categoryService = categoryService;
+            this.storageService = storageService;
         }
         public async Task<bool> CreateOrUpdateProductAsyncManagement(IFormCollection parameters)
         {
@@ -43,6 +45,7 @@ namespace CustomersOrderOtomation.Service.Concrete
 
                 string productName = parameters["productName"][0] ?? "";
                 bool productStatus = Convert.ToBoolean(parameters["productStatus"][0]);
+                var file = parameters.Files.GetFiles("fileInput").FirstOrDefault();
 
 
                 double productPrice = parameters.ContainsKey("productPrice") && parameters["productPrice"].Count > 0 &&
@@ -53,10 +56,13 @@ namespace CustomersOrderOtomation.Service.Concrete
 
                 var productForExistingControl = await productRepository.GetByIdAsync(productId);
 
+                string productImage = await storageService.UploadFileAsync(file);
+
                 ProductDto productDto = new ProductDto()
                 {
                     Name = productName,
                     Price = productPrice,
+                    ImageUrl = productImage,
                     IsActive = productStatus,
                 };
 
@@ -70,7 +76,6 @@ namespace CustomersOrderOtomation.Service.Concrete
                     productDto.CreatedAt = DateTime.Now;    
                     await productService.AddProductAsync(productDto);
                 }
-
 
             }
             catch (Exception ex)

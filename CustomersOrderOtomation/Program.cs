@@ -1,6 +1,7 @@
 using CustomersOrderOtomation.Data.DBOperations;
 using CustomersOrderOtomation.Data.Models;
 using CustomersOrderOtomation.Extensions;
+using CustomersOrderOtomation.Service.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<DatabaseContext>(
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddSignalR();
+builder.Services.AddScoped<StorageService>();
 
 var app = builder.Build();
 

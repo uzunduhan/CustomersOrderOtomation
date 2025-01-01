@@ -107,20 +107,39 @@ function SaveProductInformation() {
         return false;
     }
 
+    var fileInput = $('#inProductImageProductModal')[0].files[0];
+
+    if (!fileInput) {
+
+        new Notify({
+            title: 'Hata',
+            text: 'Product image must be selected',
+            status: 'error',
+            autoclose: true,
+            autotimeout: 2000
+        })
+
+        return false;
+    }
+
     var productId = $("#hdnProductIdProductModal").val();
     var productStatus = $("#drpProductStatus").val();
 
-    var formData = {
-        productId: productId,
-        productName: productName,
-        productPrice: productPrice,
-        productStatus: productStatus
-    };
+    var formData = new FormData();
+
+    formData.append('fileInput', fileInput);
+    formData.append('productId', $("#hdnProductIdProductModal").val());
+    formData.append('productName', productName);
+    formData.append('productPrice', productPrice);
+    formData.append('productStatus', $("#drpProductStatus").val());
+
 
     $.ajax({
         url: '/Management/CreateOrUpdateProduct',
         type: 'POST',
         data: formData,
+        processData: false,
+        contentType: false,
 
         success: function (data) {
 
